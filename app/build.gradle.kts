@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.github.spotbugs") version "4.7.1"
 }
 
 android {
@@ -28,6 +29,27 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    lint {
+        abortOnError = false
+        warningsAsErrors = false
+        showAll =  true
+    }
+}
+
+configure<com.github.spotbugs.snom.SpotBugsExtension> {
+    ignoreFailures.set(true)
+}
+
+tasks.withType<com.github.spotbugs.snom.SpotBugsTask> {
+    reports {
+        create("html") {
+            isEnabled = true
+        }
+        create("xml") {
+            isEnabled = false
+        }
     }
 }
 
