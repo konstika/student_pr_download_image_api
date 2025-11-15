@@ -14,6 +14,7 @@ import okhttp3.Response;
 public class DownloadImageWorker extends Worker {
     public static final String apiUrl = "https://random.dog/woof.json";
     public static final String TAG = "TAG_WORKER";
+
     public DownloadImageWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
@@ -27,7 +28,11 @@ public class DownloadImageWorker extends Worker {
             String imageUrl = jsonObject.getString("url");
             Data outputData = new Data.Builder().putString(TAG, imageUrl).build();
             return Result.success(outputData);
-        } catch (Exception e) {e.printStackTrace();}
+        }
+        catch (Exception e) {e.printStackTrace();}
         return Result.failure();
+    }
+    public String func1(Object[] objs){
+        return objs[10].toString();
     }
 }

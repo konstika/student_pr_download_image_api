@@ -1,8 +1,18 @@
 package com.example.project8_3;
+import static androidx.core.content.PermissionChecker.PERMISSION_GRANTED;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +26,17 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import com.squareup.picasso.Picasso;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
+    private static Context sContext; // Утечка памяти
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -40,4 +60,34 @@ public class MainActivity extends AppCompatActivity {
                             Picasso.get().load(imageUrl).into(image);
                         }
                     }});
-    }}
+        if(true){throw new RuntimeException();}
+    }
+
+    public String processData(Object object) {
+        String result  = object.getClass().descriptorString().toLowerCase();
+        return result;
+    }
+
+    private Location getLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        return location;
+    }
+
+    public String readFile(String filename) {
+        String text="";
+        try {
+            FileInputStream fis = new FileInputStream(filename);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                text+=line;
+            }
+            // Ресурсы не закрываются
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return text;
+    }
+
+}
